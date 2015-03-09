@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'parse-ruby-client'
 
-module Parse
+module StoreShipper
   
   # An application
   
@@ -13,6 +13,8 @@ module Parse
   class Version
     
     # Constants
+    
+    # Parse DB related
     
     APPLICATION_CLASSNAME                     = "Application"
     APPLICATION_VERSION_CLASSNAME             = "ApplicationVersion"
