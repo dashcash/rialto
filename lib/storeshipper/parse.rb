@@ -35,7 +35,7 @@ module StoreShipper
     
     # Methods
     
-    def initialize(parseId, parsekey, id, log, number, code, level, url)
+    def initialize(parseId, parseKey, id, log, number, code, level, url)
   
       @appId = id
       @versionLog = log
@@ -44,7 +44,7 @@ module StoreShipper
       @versionLevel = level
       @versionUrl = url
       
-      initParse(parseId, parsekey)
+      initParse(parseId, parseKey)
     end
     
     def initParse(id, key)
@@ -53,6 +53,8 @@ module StoreShipper
     end
     
     def pushToParse
+      
+      puts "pushToParse #{appId}" 
       
       parseApplication = Parse.get APPLICATION_CLASSNAME, appId
       
@@ -65,7 +67,7 @@ module StoreShipper
       
       parseAppVersion = Parse::Query.new(APPLICATION_VERSION_CLASSNAME)
       	.eq(APPLICATION_ID_PROPERTYNAME, parseApplication.pointer)
-      	.eq(APPLICATION_VERSIONNUMBER_PROPERTYNAME, versionNumber)
+      	.eq(APPLICATION_VERSIONNUMBER_PROPERTYNAME, @versionNumber)
       	.get
         
       if (parseAppVersion != nil && parseAppVersion.length > 0)
@@ -74,9 +76,9 @@ module StoreShipper
 
       	version = parseAppVersion[0]
         
-      	version[APPLICATION_VERSIONURL_PROPERTYNAME]	        = versionUrl
-      	version[APPLICATION_VERSIONCHANGELOG_PROPERTYNAME]		= versionLog
-        version[APPLICATION_VERSIONCODE_PROPERTYNAME]         = versionCode.to_i
+      	version[APPLICATION_VERSIONURL_PROPERTYNAME]	        = @versionUrl
+      	version[APPLICATION_VERSIONCHANGELOG_PROPERTYNAME]		= @versionLog
+        version[APPLICATION_VERSIONCODE_PROPERTYNAME]         = @versionCode.to_i
         
       	version.save
         
@@ -88,11 +90,11 @@ module StoreShipper
       	newVersion = Parse::Object.new(APPLICATION_VERSION_CLASSNAME)
         
       	newVersion[APPLICATION_ID_PROPERTYNAME]		            = parseApplication.pointer
-      	newVersion[APPLICATION_VERSIONCODE_PROPERTYNAME]		  = versionCode.to_i
-      	newVersion[APPLICATION_VERSIONNUMBER_PROPERTYNAME]		= versionNumber
-      	newVersion[APPLICATION_VERSIONCHANGELOG_PROPERTYNAME]	= versionLog
-      	newVersion[APPLICATION_VERSIONURL_PROPERTYNAME]			  = versionUrl
-      	newVersion[APPLICATION_VERSIONLEVEL_PROPERTYNAME]		  = versionLevel
+      	newVersion[APPLICATION_VERSIONCODE_PROPERTYNAME]		  = @versionCode.to_i
+      	newVersion[APPLICATION_VERSIONNUMBER_PROPERTYNAME]		= @versionNumber
+      	newVersion[APPLICATION_VERSIONCHANGELOG_PROPERTYNAME]	= @versionLog
+      	newVersion[APPLICATION_VERSIONURL_PROPERTYNAME]			  = @versionUrl
+      	newVersion[APPLICATION_VERSIONLEVEL_PROPERTYNAME]		  = @versionLevel
       	
         newVersion.save
         
@@ -104,7 +106,7 @@ module StoreShipper
     
     def existsInParse
       
-      parseApplication = Parse.get APPLICATION_CLASSNAME, appId
+      parseApplication = Parse.get APPLICATION_CLASSNAME, @appId
       
       if parseApplication != nil
       	puts parseApplication['applicationTitle'] + " loaded from Parse.com"
@@ -115,7 +117,7 @@ module StoreShipper
       
       parseAppVersion = Parse::Query.new(APPLICATION_VERSION_CLASSNAME)
       	.eq(APPLICATION_ID_PROPERTYNAME, parseApplication.pointer)
-      	.eq(APPLICATION_VERSIONNUMBER_PROPERTYNAME, versionNumber)
+      	.eq(APPLICATION_VERSIONNUMBER_PROPERTYNAME, @versionNumber)
       	.get
         
       if (parseAppVersion != nil && parseAppVersion.length > 0)
@@ -130,7 +132,7 @@ module StoreShipper
     
     def notifyViaParse(title, message, action, channel = "")
       
-      parseApplication = Parse.get APPLICATION_CLASSNAME, appId
+      parseApplication = Parse.get APPLICATION_CLASSNAME, @appId
       
       if parseApplication != nil
       	puts parseApplication[APPLICATION_TITLE_PROPERTYNAME] + " found in Parse.com"
@@ -153,8 +155,8 @@ module StoreShipper
       		"title" => finTitle,
       		"alert" => message,
       		"action" => action,
-      		"parseAppID" => appId,
-      		"newVersionCode" => versionCode
+      		"parseAppID" => @cappId,
+      		"newVersionCode" => @versionCode
       	}, channel)
         
       push.type = APPLICATION_TYPE

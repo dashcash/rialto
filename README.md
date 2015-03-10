@@ -11,5 +11,5 @@ Two main features will be available:
 
 2/ common use:
    - APK build
-   - metadata upload to play store
+   - metadata upload to pslay store
    - binary upload to play store
