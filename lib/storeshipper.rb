@@ -2,7 +2,6 @@
 
 require "StoreShipper/parse"
 
-puts 'My executable works!'
 #StoreShipper::Cli::Application.start(ARGV)
 
 ARGV.each do |arg|  
@@ -14,18 +13,30 @@ if (ARGV.length == 0)
 end
 
 case ARGV[0]
-  
-when "pushToParse"  
 
-  puts "Pushing to Parse..."
+  #when "build"
   
-  if (ARGV.length == 9)
-    version = StoreShipper::Version.new(ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5], ARGV[6], ARGV[7], ARGV[8])
-    version.pushToParse
+when "updateDatabase"
+  
+  if (ARGV.length == 2)
+    version = StoreShipper::Version.new()
+    version.updateDatabase(ARGV[1])
   else
-      puts "Usage: "
+    puts "Usage: storeshipper updateDatabase [version_filepath]"
   end
+  
+  #when "deploy"
 
-when "notifyViaParse"
-  puts "Notifying via Parse..."
+when "notify"
+  
+  if (ARGV.length == 2)
+    version = StoreShipper::Version.new()
+    version.notify(ARGV[1])
+  else
+    puts "Usage: storeshipper deploy [version_filepath]"
+  end
+  
+  
+else
+  puts "Usage: build | deploy | deployAndNotify"
 end
