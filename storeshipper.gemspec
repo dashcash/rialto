@@ -27,5 +27,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'thor'              , '~> 0.18'
   s.add_dependency 'parse-ruby-client' , '~> 0.3.0'
+  s.add_dependency 'minitest'          , '~> 5.5.1'
   
 end

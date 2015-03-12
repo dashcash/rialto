@@ -37,12 +37,12 @@ module StoreShipper
     
     def initialize(parseId, parseKey, id, log, number, code, level, url)
   
-      @appId = id
-      @versionLog = log
-      @versionNumber = number
-      @versionCode = code
-      @versionLevel = level
-      @versionUrl = url
+      @appId          = id
+      @versionLog     = log
+      @versionNumber  = number
+      @versionCode    = code
+      @versionLevel   = level
+      @versionUrl     = url
       
       initParse(parseId, parseKey)
     end
