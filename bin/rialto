@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
 begin
-  require "StoreShipper"
+  require "rialto"
 rescue LoadError
   require "rubygems"
-  require "StoreShipper"
+  require "rialto"
 end

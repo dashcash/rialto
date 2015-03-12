@@ -1,15 +1,17 @@
-StoreShipper
+Rialto
 ====================
 
-A gem that helps shipping Android application.
+A gem that helps shipping Android applications
 
-Two main features will be available:
-1/ compagny-specific use:
-   - parse DB update
-   - notification system
-   - APK build & upload
+It is composed of three main features:
 
-2/ common use:
-   - APK build
-   - metadata upload to pslay store
-   - binary upload to play store
+1/ Binary build (coming soon)
+
+2/ Parse MBaaS related (really specfic one - can not be used as it is)
+	- Database update
+	- Notification system
+	- Binary files to server upload
+
+3/ Play store related (coming soon)
+  	- Metadata upload 
+   	- Binary upload

@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 require 'parse-ruby-client'
+require 'nokogiri'
 
-module StoreShipper
+module Rialto
   
   # An application
   
@@ -31,20 +32,48 @@ module StoreShipper
     APPLICATION_TYPE                          = "android"
     
     # Attributes
-    attr_reader :appId, :versionLog, :versionNumber, :versionCode, :versionLevel, :versionUrl
+    attr_reader :parseId, :parseKey, :appId, :versionLog, :versionNumber, :versionCode, :versionLevel, :versionUrl
     
     # Methods
     
-    def initialize(parseId, parseKey, id, log, number, code, level, url)
-  
-      @appId          = id
-      @versionLog     = log
-      @versionNumber  = number
-      @versionCode    = code
-      @versionLevel   = level
-      @versionUrl     = url
+    def initialize()
+    end
+    
+    def initVersion(file)
       
-      initParse(parseId, parseKey)
+      f = File.open(file)
+      doc = Nokogiri::XML(f)
+      f.close
+      
+      version = doc.xpath("//version/item").map do |i|
+        {"key" => i.xpath("key"), "value" => i.xpath("value")}
+      end
+      
+      version.each { |item|
+        
+        key = item["key"][0].content
+        value = item["value"][0].content
+        
+        case key
+        when "parseId"
+          @parseId = value  
+        when "apiKey"
+          @parseKey = value 
+        when "appId"
+          @appId = value
+        when "versionCode"
+          @versionCode = value  
+        when "versionLog"
+          @versionLog = value  
+        when "versionNumber"
+          @versionNumber = value  
+        when "versionLevel"
+          @versionLevel = value 
+        when "versionUrl"
+          @versionUrl = value 
+        end
+      }
+      
     end
     
     def initParse(id, key)
@@ -52,11 +81,20 @@ module StoreShipper
     				      :api_key		=> key
     end
     
-    def pushToParse
+    def build
+      puts "build: coming soon"
+    end
+    
+    def deploy
+      puts "deploy: coming soon"
+    end
+    
+    def parseUpdate(file)
+
+      initVersion(file)
+      initParse(@parseId, @parseKey)
       
-      puts "pushToParse #{appId}" 
-      
-      parseApplication = Parse.get APPLICATION_CLASSNAME, appId
+      parseApplication = Parse.get APPLICATION_CLASSNAME, @appId
       
       if parseApplication != nil
       	puts parseApplication[APPLICATION_TITLE_PROPERTYNAME] + " loaded from Parse.com"
@@ -104,33 +142,47 @@ module StoreShipper
       
     end
     
-    def existsInParse
+    def parseNotify(file)
       
-      parseApplication = Parse.get APPLICATION_CLASSNAME, @appId
+      f = File.open(file)
+      doc = Nokogiri::XML(f)
+      f.close
       
-      if parseApplication != nil
-      	puts parseApplication['applicationTitle'] + " loaded from Parse.com"
-      else
-      	puts "No Application with id " + appId + " found"
-      	exit -1
-      end
-      
-      parseAppVersion = Parse::Query.new(APPLICATION_VERSION_CLASSNAME)
-      	.eq(APPLICATION_ID_PROPERTYNAME, parseApplication.pointer)
-      	.eq(APPLICATION_VERSIONNUMBER_PROPERTYNAME, @versionNumber)
-      	.get
-        
-      if (parseAppVersion != nil && parseAppVersion.length > 0)
-        puts "Versions found: #{parseAppVersion.length}"
-        return true
-      else
-        puts "No version found"
-        return false
+      notification = doc.xpath("//notification/item").map do |i|
+        {"key" => i.xpath("key"), "value" => i.xpath("value")}
       end
         
-    end
-    
-    def notifyViaParse(title, message, action, channel = "")
+      title = ""
+      message = ""
+      action = ""
+      channel = ""
+      
+      notification.each { |item|
+        
+        key = item["key"][0].content
+        value = item["value"][0].content
+        
+        case key
+        when "parseId"
+          @parseId = value  
+        when "apiKey"
+          @parseKey = value 
+        when "appId"
+          @appId = value
+        when "versionCode"
+          @versionCode = value  
+        when "title"
+          title = value  
+        when "message"
+          message = value  
+        when "action"
+          action = value 
+        when "channel"
+          channel = value 
+        end
+      }
+      
+      initParse(@parseId, @parseKey)
       
       parseApplication = Parse.get APPLICATION_CLASSNAME, @appId
       
@@ -155,7 +207,7 @@ module StoreShipper
       		"title" => finTitle,
       		"alert" => message,
       		"action" => action,
-      		"parseAppID" => @cappId,
+      		"parseAppID" => @appId,
       		"newVersionCode" => @versionCode
       	}, channel)
         
