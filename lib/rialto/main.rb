@@ -2,7 +2,7 @@
 require 'parse-ruby-client'
 require 'nokogiri'
 
-module StoreShipper
+module Rialto
   
   # An application
   
@@ -32,7 +32,7 @@ module StoreShipper
     APPLICATION_TYPE                          = "android"
     
     # Attributes
-    attr_reader :parseId, :parseKey, :appId, :versionLog, :versionNumber, :versionCode, :versionLevel, :versionUrl, :parseApplication
+    attr_reader :parseId, :parseKey, :appId, :versionLog, :versionNumber, :versionCode, :versionLevel, :versionUrl
     
     # Methods
     

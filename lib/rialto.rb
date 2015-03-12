@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
-
-require "StoreShipper/parse"
-
-#StoreShipper::Cli::Application.start(ARGV)
+require "rialto/main"
 
 ARGV.each do |arg|  
    puts arg
@@ -16,10 +13,10 @@ case ARGV[0]
 
   #when "build"
   
-when "updateDatabase"
+when "updateParse"
   
   if (ARGV.length == 2)
-    version = StoreShipper::Version.new()
+    version = Rialto::Version.new()
     version.updateDatabase(ARGV[1])
   else
     puts "Usage: storeshipper updateDatabase [version_filepath]"
@@ -30,7 +27,7 @@ when "updateDatabase"
 when "notify"
   
   if (ARGV.length == 2)
-    version = StoreShipper::Version.new()
+    version = Rialto::Version.new()
     version.notify(ARGV[1])
   else
     puts "Usage: storeshipper deploy [version_filepath]"
