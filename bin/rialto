@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
 begin
-  require "Rialto"
+  require "rialto"
 rescue LoadError
   require "rubygems"
-  require "Rialto"
+  require "rialto"
 end

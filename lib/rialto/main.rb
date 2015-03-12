@@ -54,8 +54,6 @@ module Rialto
         key = item["key"][0].content
         value = item["value"][0].content
         
-        puts "#{key}, #{value}"
-        
         case key
         when "parseId"
           @parseId = value  
@@ -91,8 +89,7 @@ module Rialto
       puts "deploy: coming soon"
     end
     
-    def updateDatabase(file)
-      puts "updateDatabase / Parse / #{appId}" 
+    def parseUpdate(file)
 
       initVersion(file)
       initParse(@parseId, @parseKey)
@@ -145,9 +142,7 @@ module Rialto
       
     end
     
-    def notify(file)
-      
-      puts "Notification #{file}"
+    def parseNotify(file)
       
       f = File.open(file)
       doc = Nokogiri::XML(f)
@@ -156,8 +151,6 @@ module Rialto
       notification = doc.xpath("//notification/item").map do |i|
         {"key" => i.xpath("key"), "value" => i.xpath("value")}
       end
-      
-      puts notification
         
       title = ""
       message = ""
@@ -169,7 +162,6 @@ module Rialto
         key = item["key"][0].content
         value = item["value"][0].content
         
-        puts "#{key}, #{value}"
         case key
         when "parseId"
           @parseId = value  
@@ -189,8 +181,6 @@ module Rialto
           channel = value 
         end
       }
-      
-      puts "#{parseId}, #{parseKey}"
       
       initParse(@parseId, @parseKey)
       
@@ -226,8 +216,6 @@ module Rialto
       
       
     end
-    
-
     
   end
   
