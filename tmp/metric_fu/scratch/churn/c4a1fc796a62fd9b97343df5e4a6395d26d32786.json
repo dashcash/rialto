@@ -1,0 +1,1 @@
+{"churn":{"changes":[],"class_churn":[],"method_churn":[],"changed_files":["README.md","bin/storeshipper","lib/storeshipper.rb","lib/storeshipper/cli/application.rb","lib/storeshipper/parse.rb","storeshipper.gemspec"],"changed_classes":[],"changed_methods":[]}}
